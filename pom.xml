@@ -86,6 +86,7 @@
 						<configuration>
 							<image>
 								<name>maelstrom0x8/${project.name}:${project.version}</name>
+								<builder>dashaun/builder:tiny</builder>
 							</image>
 						</configuration>
 					</execution>
