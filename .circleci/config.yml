@@ -11,6 +11,7 @@ jobs:
       image: ubuntu-2004:current
     steps:
       - checkout
+      - sdkman/setup-sdkman
       - sdkman/sdkman-install:
           candidate: java
           version: 17.0.8-amzn
