@@ -6,7 +6,7 @@ orbs:
 
 
 jobs:
-  arm64-native:
+  test:
     machine:
       image: ubuntu-2004:current
     steps:
@@ -17,36 +17,33 @@ jobs:
           version: 17.0.8-amzn
       - run:
           name: "Run Test"
-          command: |
-              ./mvnw test
-              ./mvnw spring-boot:build-image
+          command: "./mvnw test"
+
+  docker:
+    machine:
+      image: ubuntu-2004:current
+    steps:
+      - checkout
+      - sdkman/setup-sdkman
+      - sdkman/sdkman-install:
+          candidate: java
+          version: 17.0.8-amzn
+      - run:
+          name: "Push to docker"
+          command: "./mvnw spring-boot:build-image"
       - docker/check:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
-          image: maelstrom0x8/org.aeros.order-svc
+          image: maelstrom0x8/order-svc
           tag: latest
 
-
 workflows:
-  arm64-native-workflow:
+  test-build-image:
     jobs:
-      - arm64-native:
+      - test:
           context:
             - aeros-ctx
-
-
-# executors:
-#   java17:
-#     docker:
-#       - image: 'cimg/openjdk:17.0'
-#       - image: 'cimg/postgres:15.2'
-#         environment:
-#           POSTGRES_USERNAME: postgres
-#           POSTGRES_PASSWORD: postgres
-
-# workflows:
-#   maven_test:
-#     jobs:
-#       - maven/test:
-#           executor: java17
+      - docker:
+          context:
+            - aeros-ctx
