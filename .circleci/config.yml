@@ -9,13 +9,12 @@ jobs:
   build_image:
     machine:
       image: ubuntu-2004:current
-      resource_class: arm.medium
     steps:
       - checkout
       - sdkman/setup-sdkman
       - sdkman/sdkman-install:
           candidate: java
-          version: 22.3.r17-grl
+          version: 17.0.8-amzn
       - run:
           name: "boot:build-image"
           command: "./mvnw spring-boot:build-image -DskipTests"
@@ -24,16 +23,11 @@ jobs:
           docker-password: DOCKER_PASSWORD
       - docker/push:
           image: maelstrom0x8/order
-          tag: $CIRCLE_TAG-aarch_64
+          tag: $CIRCLE_TAG
 
 workflows:
   build-native-image:
     jobs:
       - build_image:
           context:
-            - aeros-ctx
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/     
+            - aeros-ctx  
