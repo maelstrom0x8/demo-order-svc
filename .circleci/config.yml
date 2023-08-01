@@ -19,7 +19,7 @@ jobs:
           name: "Run Test"
           command: "./mvnw test"
 
-  docker:
+  build:
     machine:
       image: ubuntu-2004:current
     steps:
@@ -30,13 +30,13 @@ jobs:
           version: 17.0.8-amzn
       - run:
           name: "Push to docker"
-          command: "./mvnw spring-boot:build-image"
+          command: "./mvnw spring-boot:build-image -DskipTests"
       - docker/check:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
           image: maelstrom0x8/order
-          tag: 0.0.1
+          tag: $CIRCLE_TAG
 
 workflows:
   test-build-image:
@@ -44,7 +44,7 @@ workflows:
       - test:
           context:
             - aeros-ctx
-      - docker:
+      - build:
           requires:
             - test
           context:
