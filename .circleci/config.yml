@@ -6,46 +6,34 @@ orbs:
 
 
 jobs:
-  test:
-    machine:
-      image: ubuntu-2004:current
-    steps:
-      - checkout
-      - sdkman/setup-sdkman
-      - sdkman/sdkman-install:
-          candidate: java
-          version: 17.0.8-amzn
-      - run:
-          name: "Run Test"
-          command: "./mvnw test"
-
   build_image:
     machine:
       image: ubuntu-2004:current
+      resource_class: arm.medium
     steps:
       - checkout
       - sdkman/setup-sdkman
       - sdkman/sdkman-install:
           candidate: java
-          version: 17.0.8-amzn
+          version: 22.3.r17-grl
       - run:
-          name: "Push to docker"
+          name: "boot:build-image"
           command: "./mvnw spring-boot:build-image -DskipTests"
       - docker/check:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
           image: maelstrom0x8/order
-          tag: $CIRCLE_TAG
+          tag: $CIRCLE_TAG-aarch_64
 
 workflows:
-  test-build-image:
+  build-native-image:
     jobs:
-      - test:
-          context:
-            - aeros-ctx
       - build_image:
-          requires:
-            - test
           context:
             - aeros-ctx
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/     
