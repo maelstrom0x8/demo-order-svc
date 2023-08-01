@@ -1,19 +1,43 @@
 version: 2.1
 
 orbs:
-  maven: circleci/maven@1.4.1
+  docker: circleci/docker@2.2.0
+  sdkman: joshdholtz/sdkman@0.2.0
 
-executors:
-  java17:
-    docker:
-      - image: 'cimg/openjdk:17.0'
-      - image: 'cimg/postgres:15.2'
-        environment:
-          POSTGRES_USERNAME: postgres
-          POSTGRES_PASSWORD: postgres
+
+jobs:
+  arm64-native:
+    machine:
+      image: ubuntu-2004:current
+    steps:
+      - checkout
+      - sdkman/sdkman-install:
+          candidate: java
+          version: 17.0.8-amzn
+      - run:
+          name: "Run Integration Test"
+          command: "./mvnw test"
+
 
 workflows:
-  maven_test:
+  arm64-native-workflow:
     jobs:
-      - maven/test:
-          executor: java17
+      - arm64-native:
+          context:
+            - aeros-ctx
+
+
+# executors:
+#   java17:
+#     docker:
+#       - image: 'cimg/openjdk:17.0'
+#       - image: 'cimg/postgres:15.2'
+#         environment:
+#           POSTGRES_USERNAME: postgres
+#           POSTGRES_PASSWORD: postgres
+
+# workflows:
+#   maven_test:
+#     jobs:
+#       - maven/test:
+#           executor: java17
