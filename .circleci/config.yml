@@ -19,7 +19,7 @@ jobs:
           name: "Run Test"
           command: "./mvnw test"
 
-  build:
+  build_image:
     machine:
       image: ubuntu-2004:current
     steps:
@@ -44,7 +44,7 @@ workflows:
       - test:
           context:
             - aeros-ctx
-      - build:
+      - build_image:
           requires:
             - test
           context:
