@@ -15,7 +15,7 @@ jobs:
           candidate: java
           version: 17.0.8-amzn
       - run:
-          name: "Run Integration Test"
+          name: "Run Test"
           command: "./mvnw test"
 
 
