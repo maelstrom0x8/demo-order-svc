@@ -35,8 +35,8 @@ jobs:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
-          image: maelstrom0x8/order-svc
-          tag: latest
+          image: maelstrom0x8/order
+          tag: 0.0.1
 
 workflows:
   test-build-image:
@@ -45,5 +45,7 @@ workflows:
           context:
             - aeros-ctx
       - docker:
+          requires:
+            - test
           context:
             - aeros-ctx
