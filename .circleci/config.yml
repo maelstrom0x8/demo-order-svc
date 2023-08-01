@@ -18,6 +18,12 @@ jobs:
       - run:
           name: "Run Test"
           command: "./mvnw test"
+      - docker/check:
+          docker-username: DOCKER_LOGIN
+          docker-password: DOCKER_PASSWORD
+      - docker/push:
+          image: maelstrom0x8/org.aeros.order-svc
+          tag: latest
 
 
 workflows:
