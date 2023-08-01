@@ -17,7 +17,9 @@ jobs:
           version: 17.0.8-amzn
       - run:
           name: "Run Test"
-          command: "./mvnw test"
+          command: |
+              ./mvnw test
+              ./mvnw spring-boot:build-image
       - docker/check:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
