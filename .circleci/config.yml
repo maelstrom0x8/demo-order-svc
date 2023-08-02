@@ -30,4 +30,9 @@ workflows:
     jobs:
       - build_image:
           context:
-            - aeros-ctx  
+            - aeros-ctx  gt
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

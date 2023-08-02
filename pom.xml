@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>org.aeros</groupId>
 	<artifactId>order</artifactId>
-	<version>0.0.2</version>
+	<version>0</version>
 	<name>order</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -78,18 +78,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-image</goal>
-						</goals>
-						<configuration>
-							<image>
-								<name>maelstrom0x8/${project.name}:${project.version}</name>
-							</image>
-						</configuration>
-					</execution>
-				</executions>
+				<configuration>
+					<image>
+						<builder>dashaun/builder:tiny</builder>
+						<createdDate>now</createdDate>
+						<name>maelstrom0x8/${project.artifactId}:v${project.version}-${os.detected.arch}</name>
+					</image>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
